@@ -4,10 +4,13 @@ GameSolverBackend is a backend service deployed on **AWS Elastic Beanstalk** tha
 
 ## **Deployment and Configuration**
 - The backend code is packaged as a **zip file** and deployed to **Elastic Beanstalk**.
-- The configuration files in `.ebextensions` and `.platform/nginx/conf.d` are used to:
-  - Adjust request timeouts.
-  - Enable and enforce **HTTPS**.
-  - Disable response buffering to ensure real-time messages are sent to the frontend.
+- `.ebextensions/https-instance-single.config`: allow inbound https traffics
+- `.ebextensions/https-instance-example.config`: create ssl certificate file (`server.crt`) and key file (`server.key`) on **nginx**. Replace the placeholders with your ssl certificate and keys. You can find free ssl on [ZeroSSL](http://www.zerossl.com/)
+- `.platform/nginx/conf.d/https.conf`: create https server
+- `.platform/nginx/conf.d/elasticbeanstalk/00_application.conf`: redirect https request to the backend running on http
+- `.platform/nginx/conf.d/myconf.conf`:
+    - Adjust request timeouts.
+    - Disable response buffering to ensure real-time messages are sent to the frontend.
 
 ## **Features**
 - Provides APIs for game outcome calculation.
